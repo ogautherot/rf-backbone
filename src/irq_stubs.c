@@ -129,18 +129,13 @@ void Sct0_1IRQ(void)
 	CpuIdle();
 }
 
-void Ssp1IRQ(void)
-{
-	VectNum = 14;
-	CpuIdle();
-}
-
 void I2c0IRQ(void)
 {
 	VectNum = 15;
 	CpuIdle();
 }
 
+#ifdef NEVER
 void Ct16b0IRQ(void)
 {
 	VectNum = 16;
@@ -152,24 +147,7 @@ void Ct16b1IRQ(void)
 	VectNum = 17;
 	CpuIdle();
 }
-
-void Ct32b0IRQ(void)
-{
-	VectNum = 18;
-	CpuIdle();
-}
-
-void Ct32b1IRQ(void)
-{
-	VectNum = 19;
-	CpuIdle();
-}
-
-void Ssp0IRQ(void)
-{
-	VectNum = 20;
-	CpuIdle();
-}
+#endif
 
 void Usart0IRQ(void)
 {

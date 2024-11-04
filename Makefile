@@ -17,9 +17,10 @@ LIBS=-lgcc -lc
 OBJS=obj/bootstrap_lpc11u6x.o  obj/aeabi_romdiv_patch.o \
 	obj/crp.o \
 	obj/at25df641.o obj/enc28j60.o obj/mrf49xa.o \
-	obj/lpc_ssp.o \
+	obj/lpc_ssp.o obj/lpc_ct32.o \
 	obj/sysinit_lpc11u6x.o obj/main.o obj/event.o obj/systick.o \
-	obj/irq_stubs.o 
+
+#	obj/irq_stubs.o 
 #	obj/cdc_desc.o obj/cdc_main.o obj/cdc_vcom.o \
 
 TARGET=rf-backbone.elf

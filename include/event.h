@@ -18,6 +18,10 @@ typedef enum eventEnum
 {
     EVENT_NOP = 0,
     EVENT_SYSTICK, // 1
+    EVENT_TIMER0,  // 2
+    EVENT_TIMER1,  // 3
+    EVENT_SSP0,    // 4
+    EVENT_SSP1,    // 5
 } eventEnum;
 
 /**

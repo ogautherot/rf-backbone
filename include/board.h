@@ -1,6 +1,6 @@
 /**
  * Board descriptor
- * 
+ *
  * PIO0_0:              Reset
  * PIO0_1:              CLKOUT
  * PIO0_2:              SSP0_SSEL
@@ -20,16 +20,16 @@
  * PIO0_21:             RF_SDI
  * PIO0_22:             RF_IRO
  * PIO0_23:             RF_CS
- * 
+ *
  * PIO1_13:             RF_RESET
  * PIO1_20:             RF_SCK (SSP1)
  * PIO1_21:             RF_SDO (SSP1)
  * PIO1_{23,24}:        N.U.
- * 
+ *
  * PIO2_2:              RF_FINT
  * PIO2_5:              N.U.
  * PIO2_7:              ETH_INT
- * 
+ *
  * Modules used: SSP0 (shared), SSP1, UART0 (RS485), ADC
  */
 
@@ -47,14 +47,23 @@
 #endif
 
 #include "lpc11u6x.h"
-//#include "lpc11u6x_resources.h"
+// #include "lpc11u6x_resources.h"
 #include "lpc11u6x_symbols.h"
 
-void SystemCoreClockUpdate(void);
-//void Board_Init(void);
-void Chip_USB_Init(void);
-void NVIC_EnableIRQ(uint32_t vector);
-void NVIC_DisableIRQ(uint32_t vector);
-//void Board_SystemInit(void);
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+    void SystemCoreClockUpdate(void);
+    // void Board_Init(void);
+    void Chip_USB_Init(void);
+    void NVIC_EnableIRQ(uint32_t vector);
+    void NVIC_DisableIRQ(uint32_t vector);
+    // void Board_SystemInit(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __BOARD_H_INCLUDED__

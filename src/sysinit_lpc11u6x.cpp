@@ -5,30 +5,9 @@
  * Copyright(C) NXP Semiconductors, 2013
  * All rights reserved.
  *
- * @par
- * Software that is described herein is for illustrative purposes only
- * which provides customers with programming information regarding the
- * LPC products.  This software is supplied "AS IS" without any warranties of
- * any kind, and NXP Semiconductors and its licensor disclaim any and
- * all warranties, express or implied, including all implied warranties of
- * merchantability, fitness for a particular purpose and non-infringement of
- * intellectual property rights.  NXP Semiconductors assumes no responsibility
- * or liability for the use of the software, conveys no license or rights under
- * any patent, copyright, mask work right, or any other intellectual property
- * rights in or to any products. NXP Semiconductors reserves the right to make
- * changes in the software without notification. NXP Semiconductors also makes
- * no representation or warranty that such application will be suitable for the
- * specified use without further testing or modification.
- *
- * @par
- * Permission to use, copy, modify, and distribute this software and its
- * documentation is hereby granted, under NXP Semiconductors' and its
- * licensor's relevant copyrights in the software, without fee, provided that it
- * is used in conjunction with NXP Semiconductors microcontrollers.  This
- * copyright, permission, and disclaimer notice must appear in all copies of
- * this code.
  */
 
+#include "lpc11u6x.h"
 #include "RomAPI.h"
 #include "board.h"
 // #include "lpc11u6x_resources.h"
@@ -43,6 +22,7 @@
 			}               \
 		}                   \
 	}
+
 #define check_address(a, b) (((uint32_t)(a)) == ((uint32_t)(b)))
 
 /*****************************************************************************
@@ -61,6 +41,9 @@
  * Public functions
  ****************************************************************************/
 
+/**
+ *
+ */
 void SysconDefaultsPreset(void)
 {
 	volatile SysConStruct *syscon = SYSCON;
@@ -81,6 +64,9 @@ void SysconDefaultsPreset(void)
 	syscon->ClkOutUEn = 1;
 }
 
+/**
+ *
+ */
 void SystickInit(void)
 {
 	volatile SystickStruct *systick = SYSTICK;
@@ -92,6 +78,9 @@ void SystickInit(void)
 	systick->csr = (1 << 2) | (1 << 0);
 }
 
+/**
+ *
+ */
 void SystickEnable()
 {
 	volatile SystickStruct *systick = SYSTICK;
@@ -99,6 +88,9 @@ void SystickEnable()
 	systick->csr |= (1 << 0);
 }
 
+/**
+ *
+ */
 void SystickIntEnable()
 {
 	volatile SystickStruct *systick = SYSTICK;
@@ -106,6 +98,9 @@ void SystickIntEnable()
 	systick->csr |= (1 << 1);
 }
 
+/**
+ *
+ */
 void WatchdogInit()
 {
 	volatile SysConStruct *syscon = SYSCON;
@@ -113,6 +108,9 @@ void WatchdogInit()
 	syscon->WdtOscCtrl = 0x3f;
 }
 
+/**
+ *
+ */
 void PowerUpPeriph(void)
 {
 	uint32_t cnt = 5000;
@@ -132,6 +130,9 @@ void PowerUpPeriph(void)
 	}
 }
 
+/**
+ *
+ */
 void SetClockDividers(void)
 {
 	volatile SysConStruct *syscon = SYSCON;
@@ -141,34 +142,55 @@ void SetClockDividers(void)
 							 (1 << 15) | (1 << 13) | (1 << 12) | (1 << 10) |
 							 (1 << 9) | (1 << 8) | (1 << 7);
 	syscon->Usart0ClkDiv = 12;
-	syscon->Ssp0ClkDiv = 12;
-	syscon->Ssp1ClkDiv = 12;
+	syscon->Ssp0ClkDiv = 2;
+	syscon->Ssp1ClkDiv = 2;
 }
 
+/**
+ *
+ */
 void SystemCoreClockUpdate(void) {}
 
+/**
+ *
+ */
 void Board_Init(void) {}
 
+/**
+ *
+ */
 void Chip_USB_Init(void) {}
 
+/**
+ *
+ */
 void NVIC_Init(void)
 {
 	// Disable all interrupts
 	NVIC->icer0 = 0xffffffff;
 }
 
+/**
+ *
+ */
 void NVIC_EnableIRQ(uint32_t vector)
 {
 	// Set enable bit in ISER
 	NVIC->iser0 = (1 << vector);
 }
 
+/**
+ *
+ */
 void NVIC_DisableIRQ(uint32_t vector)
 {
 	// Clear enable bit in ICER
 	NVIC->icer0 = (1 << vector);
 }
 
+/**
+ *
+ */
 void ClkOutInit()
 {
 	volatile SysConStruct *syscon = SYSCON;
@@ -238,6 +260,9 @@ uint32_t UsbPllInit()
 	return -1;
 }
 
+/**
+ *
+ */
 void ReleaseReset(void)
 {
 	volatile SysConStruct *syscon = SYSCON;
@@ -245,6 +270,9 @@ void ReleaseReset(void)
 	syscon->PResetCtrl |= 0x3f; // (1 << 10) | (1 << 9) | (1 << 2) | (1 << 0);
 }
 
+/**
+ *
+ */
 void IoconfigInit(void)
 {
 	volatile IoconStruct *iocon = IOCON;
@@ -261,6 +289,20 @@ void IoconfigInit(void)
 	iocon->pio1_21 = 0x92;
 }
 
+/**
+ *
+ */
+void GpioInit(void)
+{
+	volatile GpioStruct *gpio = GPIO0;
+
+	gpio->dir0 = 0x00800084;
+	gpio->dir1 = 0x00002000;
+}
+
+/**
+ *
+ */
 void ForceResetState(void)
 {
 	volatile SysConStruct *syscon = SYSCON;
@@ -272,6 +314,9 @@ void ForceResetState(void)
 	syscon->UsbPllClkUEn = 1; // 0
 }
 
+/**
+ *
+ */
 void Chip_Init(void)
 {
 	// SysconDefaultsPreset();
@@ -281,13 +326,17 @@ void Chip_Init(void)
 	SysPllInit(0);
 	SetClockDividers();
 	IoconfigInit();
-	SystickInit();
+	GpioInit();
+	// SystickInit();
 	ClkOutInit();
 	// UsbPllInit();
 
 	WatchdogInit();
 }
 
+/**
+ *
+ */
 void Board_SystemInit(void)
 {
 	NVIC_Init();
@@ -295,6 +344,9 @@ void Board_SystemInit(void)
 	SystickEnable();
 }
 
+/**
+ *
+ */
 void CheckMapping(void) {}
 
 /* Set up and initialize hardware prior to call to main */
